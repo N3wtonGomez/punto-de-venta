@@ -1,414 +1,14 @@
 #include <iostream>
 #include <cstring>
+#include <stdio.h>
 #include <fstream> // lectura de archivos
 // #include <conio.h>
-// #include "trabajadores.h"
-// #include "productos.h"
+#include "trabajadores.h"
+#include "productos.h"
 #include "num_letras.h"
-// #include "ventas.h"
+#include "ventas.h"
 using namespace std;
 
-void AgregarProducto(int ID, string NOMBRE, string GENERICO, int tipo,float COSTO, float VENTA, int EXISTENCIA){
-    // variable del archivo
-    ofstream arch_empleados;
-    arch_empleados.open("productos.txt", ios::app);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    arch_empleados <<ID<<";"<<NOMBRE<<";"<<GENERICO<<";"<<tipo<<";"<<COSTO<<";"<<VENTA<<";"<<EXISTENCIA<<";"<<endl;
-    // cerramos el archivos
-    arch_empleados.close();
-
-    cout << "Producto agregado" << endl;
-}
-
-void RestarExistenciaProducto(int ID){
-    ifstream arch_empleados;
-    ofstream arch_empleados_in;
-    string info, datos[6];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("productos.txt", ios::in);
-    arch_empleados_in.open("temp.txt", ios::app);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    bool encontrado = false;
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            if(datos[0] == to_string(ID)){
-                int temp = atoi(datos[6].c_str());
-                temp -= 1;
-                datos[6] = to_string(temp);
-            }else{
-                for (int i = 0; i < 6; i++){
-                    arch_empleados_in << datos[i] << ";";
-                }
-                arch_empleados_in << endl;
-            }
-        }        
-    }
-    remove("productos.txt");
-    rename("temp.txt", "productos.txt");
-}
-
-int BusquedaUltimoProcuto(){
-    ifstream arch_empleados;
-    string info, datos[6];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("productos.txt", ios::in);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    bool encontrado = false;
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-        }        
-    }
-    int id = atoi(datos[0].c_str());
-    if(id<3){
-        return 3;
-    }else{
-        return id +1;
-    }
-}
-
-void TodosProductos(){
-    ifstream arch_empleados;
-    string info, datos[6];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("productos.txt", ios::in);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            for (int i = 0; i < 6; i++){
-                    cout << datos[i] << "\t|\t";
-            }
-            cout << endl;
-        }        
-    }
-}
-
-string *BusquedaProductos(int ID){
-    ifstream arch_empleados;
-    string info;
-    static string datos[6];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("productos.txt", ios::in);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    bool encontrado = false;
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            if(datos[0] == to_string(ID)){
-                break; break;
-            }else{
-                cout << "Producto no encontrado" << endl;
-            }
-        }        
-    }
-    return datos;
-}
-
-void BajaProductos(int ID){
-    ifstream arch_empleados;
-    ofstream arch_empleados_in;
-    string info, datos[6];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("productos.txt", ios::in);
-    arch_empleados_in.open("temp.txt", ios::app);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    bool encontrado = false;
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            if(datos[0] == to_string(ID)){
-                cout << "El producto ha sido eliminado" << endl;
-            }else{
-                for (int i = 0; i < 6; i++){
-                    arch_empleados_in << datos[i] << ";";
-                }
-                arch_empleados_in << endl;
-            }
-        }        
-    }
-    remove("productos.txt");
-    rename("temp.txt", "productos.txt");
-}
-
-void AltaTrabajador(int ID, string NOMBRE, string PATERNO, string MATERNO, long telefono, int civil, string DEPARTAMENTO, int turno){
-    // variable del archivo
-    ofstream arch_empleados;
-    arch_empleados.open("empleados.txt", ios::app);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    arch_empleados <<ID<<";"<<NOMBRE<<";"<<PATERNO<<";"<<MATERNO<<";"<<telefono<<";"<<civil<<";"<<DEPARTAMENTO<<";"<<turno<<";"<<endl;
-    // cerramos el archivos
-    arch_empleados.close();
-
-    cout << "Usuario agregado" << endl;
-}
-
-void BajaTrabajador(int ID){
-    ifstream arch_empleados;
-    ofstream arch_empleados_in;
-    string info, datos[8];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("empleados.txt", ios::in);
-    arch_empleados_in.open("temp.txt", ios::app);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    bool encontrado = false;
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            if(datos[0] == to_string(ID)){
-                cout << "El usuario ha sido eliminado" << endl;
-            }else{
-                for (int i = 0; i < 8; i++){
-                    arch_empleados_in << datos[i] << ";";
-                }
-                arch_empleados_in << endl;
-            }
-        }        
-    }
-    remove("empleados.txt");
-    rename("temp.txt", "empleados.txt");
-}
-
-int BusquedaUltimoEmpleado(){
-    ifstream arch_empleados;
-    string info, datos[8];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("empleados.txt", ios::in);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    bool encontrado = false;
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-        }        
-    }
-    int id = atoi(datos[0].c_str());
-    return id +1;
-}
-
-void BusquedaEmpleado(int ID){
-    ifstream arch_empleados;
-    string info, datos[8];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("empleados.txt", ios::in);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    bool encontrado = false;
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            if(datos[0] == to_string(ID)){
-                for (int i = 0; i < 8; i++){
-                    cout << datos[i] << "   ";
-                }
-                cout << endl;
-            }else{
-                cout << "Trabajador no encontrado" << endl;
-            }
-        }        
-    }
-}
-
-void TodosEmpleados(){
-    ifstream arch_empleados;
-    string info, datos[8];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("empleados.txt", ios::in);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            for (int i = 0; i < 8; i++){
-                    cout << datos[i] << "\t|\t";
-            }
-            cout << endl;
-        }        
-    }
-}
-
-const std::string currentDateTime() {
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
-    tstruct = *localtime(&now);
-    strftime(buf, sizeof(buf), "%Y-%m-", &tstruct);
-
-    return buf;
-}
-
-void ventas_hechas(int id, string cliente){
-    // variable del archivo
-    ofstream ventas;
-    ventas.open("ventas.txt", ios::app);
-
-    if(ventas.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    ifstream arch_empleados;
-    string info, datos[3];
-    int clave, contador = 0;
-    size_t posicion;
-
-    arch_empleados.open("carrito.txt", ios::in);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    ventas << currentDateTime() << ";";
-    ventas << endl << id << ";" << endl << cliente << ";" << endl;
-
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            for (int i = 0; i < 3; i++){
-                    ventas << datos[i] << ";";
-            }
-            ventas << endl;
-        }        
-    }
-    ventas << endl;
-    ventas.close();
-     
-} 
-
-int ventasxDia(){
-    ifstream arch_empleados;
-    string info, datos[3];
-    int clave, contador = 0, ventas_dias = 0;
-    size_t posicion;
-
-    arch_empleados.open("ventas.txt", ios::in);
-
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            if(datos[0] == currentDateTime()){
-                ventas_dias += 1;
-            }
-        }        
-    }
-    return ventas_dias;
-}
 
 // menus
 int MenuPrincipal(){
@@ -500,7 +100,7 @@ void VerCarrito(){
     if(arch_empleados.fail()){
         cout << "No se pudo abrir el archivo";
     }
-
+    // if(arch_empleados.)
     while (!arch_empleados.eof()){
         while(getline(arch_empleados, info)){
             while((posicion=info.find(";"))!=string::npos){
@@ -593,10 +193,11 @@ void Venta(){
             Ticket();
         }
         else{
-            string *info = BusquedaProductos(id);
+            string info = "hola";
+            // string *info = BusquedaProductos(id);
 
-            AddCarrito(info);
-            RestarExistenciaProducto(id);
+            // AddCarrito(info);
+            // RestarExistenciaProducto(id);
         }
         id = 0;
     }
@@ -627,11 +228,11 @@ int main(){
                         cout << "Ingresa el nombre generico: ";
                         cin >> generico;
 
-                        cout << "Ingresa el costo: ";
-                        cin >> costo;
-
                         cout << "Ingresa el tipo (1.Medicamento\t2.Dulces\t3.Limpieza\t4.Etc)";
                         cin >> tipo;
+
+                        cout << "Ingresa el costo: ";
+                        cin >> costo;
 
                         cout << "Ingresa el precio de venta: ";
                         cin >> venta;
@@ -639,7 +240,7 @@ int main(){
                         cout << "Ingresa la existencia: ";
                         cin >> existencia;
 
-                        id = BusquedaUltimoProcuto();
+                        id = BusquedaUltimoProducto();
 
                         AgregarProducto(id, nombre, generico, tipo, costo, venta, existencia);
                         break;
@@ -655,11 +256,11 @@ int main(){
                         cout << "Ingrese el ID: ";
                         cin >> idaux;
 
-                        string* info = BusquedaProductos(idaux);
-                        for (int i = 0; i < 6; i++){
-                            cout << info[i] << "\t|\t";
-                        }
-                        cout << endl;
+                        // string* info = BusquedaProductos(idaux);
+                        // for (int i = 0; i < 6; i++){
+                        //     cout << info[i] << "\t|\t";
+                        // }
+                        // cout << endl;
                         
                         break;
                     }
@@ -673,7 +274,7 @@ int main(){
 
                         break;
                     }
-                    default: cout << "Valor fuera de rango" << endl; system("pause"); break;
+                    default: cout << "Valor fuera de rango" << endl; int c = getchar(); break;
                 }
                 break;
             }
@@ -727,9 +328,9 @@ int main(){
                         cin >> turno;
 
                         ID = BusquedaUltimoEmpleado();
-
+                        cout << ID;
                         AltaTrabajador(ID, NOMBRE, PATERNO, MATERNO, telefono, civil, DEPARTAMENTO, turno);
-                        system("pause");
+                        // int c = getchar();
                         break;
                     }
 
@@ -740,7 +341,7 @@ int main(){
                         cin >> id;
 
                         BajaTrabajador(id);
-                        system("pause");
+                        int c = getchar();
                         break;
                     }
 
@@ -750,25 +351,29 @@ int main(){
                         cout << "Ingresa el ID a buscar: ";
                         cin >> id;
                         BusquedaEmpleado(id);
-                        system("pause");
+                        int c = getchar();
                         break;
                     }
 
                     case 4: {
                         cout << "Lista de empleados" << endl << endl;
                         TodosEmpleados();
-                        system("pause");
+                        int c = getchar();
+                        while (c != '\n'){
+                            /* code */
+                        }
+                        
                         break;
                     }
 
                     case 5: {break;}
-                    default: cout << "Valor fuera de rango" << endl; system("pause"); break;
+                    default: cout << "Valor fuera de rango" << endl; int c = getchar(); break;
                 }
                 ans = 0;
                 break;
             }
             case 5: continua = false; break;
-            default: cout << "Valor fuera de rango" << endl; system("pause"); break;
+            default: cout << "Valor fuera de rango" << endl; int c = getchar(); break;
         }
         menu = 0;
     }
