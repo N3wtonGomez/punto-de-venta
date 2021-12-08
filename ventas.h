@@ -16,7 +16,7 @@ const std::string currentDateTime() {
 void ventas_hechas(int id, string cliente){
     // variable del archivo
     ofstream ventas;
-    ventas.open("ventas.txt", ios::app);
+    ventas.open("ventas.bin", ios::app);
 
     if(ventas.fail()){
         cout << "No se pudo abrir el archivo";
@@ -27,7 +27,7 @@ void ventas_hechas(int id, string cliente){
     int clave, contador = 0;
     size_t posicion;
 
-    arch_empleados.open("carrito.txt", ios::in);
+    arch_empleados.open("carrito.bin", ios::in);
 
     if(arch_empleados.fail()){
         cout << "No se pudo abrir el archivo";
@@ -61,7 +61,7 @@ int ventasxDia(){
     int clave, contador = 0, ventas_dias = 0;
     size_t posicion;
 
-    arch_empleados.open("ventas.txt", ios::in);
+    arch_empleados.open("ventas.bin", ios::in);
 
     if(arch_empleados.fail()){
         cout << "No se pudo abrir el archivo";

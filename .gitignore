@@ -1,4 +1,5 @@
 main
 num
 *.txt
+*.bin
 .vscode

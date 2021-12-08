@@ -7,7 +7,7 @@ using namespace std;
 void AltaProducto(int ID, string NOMBRE, string GENERICO, string TIPO, string COSTO, string VENTA, string EXISTENCIA){
     // variable del acrhivo
     ofstream arch_productos;
-    arch_productos.open("productos.txt", ios::app);
+    arch_productos.open("productos.bin", ios::app);
 
     // por si falla el archivo
     if(arch_productos.fail()){
@@ -29,8 +29,8 @@ void BajaProducto(int ID){
     int clave, contador = 0;
     size_t posicion;
 
-    arch_productos.open("productos.txt", ios::in);
-    arch_productos_in.open("temp.txt", ios::app);
+    arch_productos.open("productos.bin", ios::in);
+    arch_productos_in.open("temp.bin", ios::app);
 
     if(arch_productos.fail()){
         cout << "No se pudo abrir el archivo";
@@ -58,13 +58,13 @@ void BajaProducto(int ID){
     }
     arch_productos_in.close();
     arch_productos.close();
-    remove("productos.txt");
-    rename("temp.txt", "productos.txt");
+    remove("productos.bin");
+    rename("temp.bin", "productos.bin");
 }
 
 int BusquedaUltimoProductos(){
     ifstream comprobacion;
-    comprobacion.open("productos.txt");
+    comprobacion.open("productos.bin");
 
     if(comprobacion.good()){
         ifstream arch_productos;
@@ -72,7 +72,7 @@ int BusquedaUltimoProductos(){
         int clave, contador = 0, posiciones = 0;
         size_t posicion;
 
-        arch_productos.open("productos.txt", ios::in);
+        arch_productos.open("productos.bin", ios::in);
 
         if(arch_productos.fail()){
             cout << "No se pudo abrir el archivo" << endl;
@@ -103,7 +103,7 @@ void TodosProductos(){
     int clave, contador = 0;
     size_t posicion;
 
-    arch_productos.open("productos.txt", ios::in);
+    arch_productos.open("productos.bin", ios::in);
 
     if(arch_productos.fail()){
         cout << "no se pudo abrir el archivo" << endl;
@@ -132,7 +132,7 @@ void BusquedaProducto(int ID){
     int clave, contador= 0;
     size_t posicion;
 
-    arch_productos.open("productos.txt", ios::in);
+    arch_productos.open("productos.bin", ios::in);
 
     if(arch_productos.fail()){
         cout << "No se pudo abrir el archivo";
@@ -167,7 +167,7 @@ string* BusquedaProductos(int ID){
     int clave, contador= 0;
     size_t posicion;
 
-    arch_productos.open("productos.txt", ios::in);
+    arch_productos.open("productos.bin", ios::in);
 
     if(arch_productos.fail()){
         cout << "No se pudo abrir el archivo";
@@ -200,8 +200,8 @@ void RestarExistenciaProducto(int ID){
     int clave, contador = 0;
     size_t posicion;
 
-    arch_productos.open("productos.txt", ios::in);
-    arch_productos_in.open("temp.txt", ios::app);
+    arch_productos.open("productos.bin", ios::in);
+    arch_productos_in.open("temp.bin", ios::app);
 
     if(arch_productos.fail()){
         cout << "No se pudo abrir el archivo";
@@ -234,6 +234,6 @@ void RestarExistenciaProducto(int ID){
     }
     arch_productos_in.close();
     arch_productos.close();
-    remove("productos.txt");
-    rename("temp.txt", "productos.txt");
+    remove("productos.bin");
+    rename("temp.bin", "productos.bin");
 }
