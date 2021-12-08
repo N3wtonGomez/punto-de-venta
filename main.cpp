@@ -1,13 +1,14 @@
 #include <iostream>
-#include <cstring>
+#include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <fstream> // lectura de archivos
-// #include <conio.h>
+using namespace std;
+// bibliotecas propias
 #include "trabajadores.h"
-#include "productos.h"
 #include "num_letras.h"
 #include "ventas.h"
-using namespace std;
+#include "productos.h"
 
 
 // menus
@@ -96,27 +97,30 @@ void VerCarrito(){
     float suma = 0;
 
     arch_empleados.open("carrito.txt", ios::in);
+    if(arch_empleados.good()){
+        if(arch_empleados.fail()){
+            cout << "No se pudo abrir el archivo";
+        }
+        // if(arch_empleados.)
+        while (!arch_empleados.eof()){
+            while(getline(arch_empleados, info)){
+                while((posicion=info.find(";"))!=string::npos){
+                    datos[contador] = info.substr(0, posicion);
+                    info.erase(0, posicion+1);
+                    contador++;
+                }
+                contador = 0;
+                cout << datos[0] << "\t" << datos[2];
 
-    if(arch_empleados.fail()){
-        cout << "No se pudo abrir el archivo";
-    }
-    // if(arch_empleados.)
-    while (!arch_empleados.eof()){
-        while(getline(arch_empleados, info)){
-            while((posicion=info.find(";"))!=string::npos){
-                datos[contador] = info.substr(0, posicion);
-                info.erase(0, posicion+1);
-                contador++;
-            }
-            contador = 0;
-            cout << datos[0] << "\t" << datos[2];
-
-            char aux[10];
-            strcpy(aux, datos[4].c_str());
-            suma += atof(aux);
-            cout << endl << endl << "Total: " << suma;
-            cout << endl;
-        }        
+                char aux[10];
+                strcpy(aux, datos[4].c_str());
+                suma += atof(aux);
+                cout << endl << endl << "Total: " << suma;
+                cout << endl;
+            }        
+        }
+    }else{
+        cout << "Aun no agregas nada al carrito" << endl;
     }
 }
 
@@ -176,33 +180,6 @@ void Ticket(){
     }
 }
 
-void Venta(){
-    while (true){
-        system("clear");
-        VerCarrito();
-        
-        int id;
-        cout << endl << "1. Salir\t2. Cobrar";
-        cout << endl << "Ingresa el ID para agregar: ";
-        cin >> id;
-
-        if(id == 1){
-            break;
-        }
-        if(id == 2){
-            Ticket();
-        }
-        else{
-            string info = "hola";
-            // string *info = BusquedaProductos(id);
-
-            // AddCarrito(info);
-            // RestarExistenciaProducto(id);
-        }
-        id = 0;
-    }
-}
-
 int main(){
 
     bool continua = true;
@@ -212,92 +189,83 @@ int main(){
         int menu = MenuPrincipal();
         switch (menu){
             case 1: {
-                Venta();
-                break;
-            }
-            case 2:{
-                int res = MenuProductos();
-                switch (res){
-                    case 1:{
-                        string nombre, generico;
-                        float venta, costo;
-                        int id, existencia, tipo;
-                        cout << "Ingresa el nombre del medicamento: ";
-                        cin >> nombre;
+                while (true){
+                    system("clear");
+                    VerCarrito();
+                    
+                    int id;
+                    cout << endl << "1. Salir\t2. Cobrar";
+                    cout << endl << "Ingresa el ID para agregar: ";
+                    cin >> id;
 
-                        cout << "Ingresa el nombre generico: ";
-                        cin >> generico;
-
-                        cout << "Ingresa el tipo (1.Medicamento\t2.Dulces\t3.Limpieza\t4.Etc)";
-                        cin >> tipo;
-
-                        cout << "Ingresa el costo: ";
-                        cin >> costo;
-
-                        cout << "Ingresa el precio de venta: ";
-                        cin >> venta;
-
-                        cout << "Ingresa la existencia: ";
-                        cin >> existencia;
-
-                        id = BusquedaUltimoProducto();
-
-                        AgregarProducto(id, nombre, generico, tipo, costo, venta, existencia);
+                    if(id == 1){
                         break;
                     }
-                    
-                    case 2:{
+                    if(id == 2){
+                        Ticket();
+                    }
+                    else{
+                        string *info = BusquedaProductos(id);
+
+                        AddCarrito(info);
+                        RestarExistenciaProducto(id);
+                    }
+                    id = 0;
+                }
+                break;
+            }
+            case 2: {
+                int ans = MenuProductos();
+                switch (ans){
+                    case 1: {
+                        string nombre, generico, tipo, costo, venta, existencia;
+                        int id;
+                        cout << "Ingresa el nombre del Producto: ";
+                        cin >> nombre;
+
+                        cout << "Ingresa el generico del producto: ";
+                        cin >> generico;
+
+                        cout << "Ingresa el tipo de producto (1.Medicamento\t2.Dulces\t3.Etc): ";
+                        cin >> tipo;
+
+                        cout << "Ingresa el costo del producto: ";
+                        cin >> costo;
+
+                        cout << "Ingresa la venta del producto: ";
+                        cin >> venta;
+
+                        cout << "Existencia: ";
+                        cin >> existencia;
+
+                        id = BusquedaUltimoProductos();
+                        AltaProducto(id, nombre, generico, tipo, costo, venta, existencia);
+                        break;        
+                    }
+                    case 2: {
                         TodosProductos();
                         break;
                     }
-
-                    case 3:{
-                        int idaux;
-                        cout << "Ingrese el ID: ";
-                        cin >> idaux;
-
-                        // string* info = BusquedaProductos(idaux);
-                        // for (int i = 0; i < 6; i++){
-                        //     cout << info[i] << "\t|\t";
-                        // }
-                        // cout << endl;
-                        
+                    case 3: {
+                        int id;
+                        cout << "Ingresa el ID: ";
+                        cin >> id;
+                        BusquedaProducto(id);
                         break;
                     }
-
-                    case 4:{
-                        int aux2;
-                        cout << "Ingrese el ID: ";
-                        cin >> aux2;
-
-                        BajaProductos(aux2);
-
+                    case 4: {
+                        int id;
+                        cout << "Ingresa el ID del producto a eliminar: ";
+                        cin >> id;
+                        BajaProducto(id);
                         break;
                     }
-                    default: cout << "Valor fuera de rango" << endl; int c = getchar(); break;
                 }
+                ans = 0;
                 break;
             }
-            case 3:{
-                int les = MenuConsultas();
-                switch (les){
-                case 1:{
-                    int ventasxdia = ventasxDia();
-                    cout << "Se realizaron " << ventasxDia << " ventas";
-                    break;
-                }
-                case 2:{
-                    int atendidosxdai = ventasxDia();
-                    cout << "Se atendieron " << atendidosxdai << " clientes";
-                    break;
-                }
-                
-                default:
-                    break;
-                }
-                break;
-            }
-            case 4:{
+            case 3: break;
+            case 4: {
                 int ans = MenuTrabajadores();
                 switch(ans){
                     case 1:{
@@ -359,10 +327,6 @@ int main(){
                         cout << "Lista de empleados" << endl << endl;
                         TodosEmpleados();
                         int c = getchar();
-                        while (c != '\n'){
-                            /* code */
-                        }
-                        
                         break;
                     }
 
