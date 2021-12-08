@@ -13,10 +13,10 @@ using namespace std;
 
 // menus
 int MenuPrincipal(){
-    system("clear");
+    system("cls");
     int ans;
 
-    cout << "                   FARMACIAS ''" << endl << endl;
+    cout << "                   FARMACIAS 'JUANITO'" << endl << endl;
     cout << "1..........................................COMPRAR" << endl;
     cout << "2........................................PRODUCTOS" << endl;
     cout << "3........................................CONSULTAS" << endl;
@@ -29,7 +29,7 @@ int MenuPrincipal(){
 }
 
 int MenuProductos(){
-    system("clear");
+    system("cls");
     int ans;
 
     cout << "1..........................................AGREGAR" << endl;
@@ -44,7 +44,7 @@ int MenuProductos(){
 }
 
 int MenuTrabajadores(){
-    system("clear");
+    system("cls");
     int ans;
 
     cout << "1.............................................ALTA" << endl;
@@ -59,7 +59,7 @@ int MenuTrabajadores(){
 }
 
 int MenuConsultas(){
-    system("clear");
+    system("cls");
     int ans;
     
     cout << "1.....................................VENTAS X DIA" << endl;
@@ -68,7 +68,10 @@ int MenuConsultas(){
     cout << "4..............................VENTAS X VENDEDORES" << endl;
     cout << "5.............................ARTICULOS + VENDIDOS" << endl;
     cout << "6.............................ARTICULOS - VENDIDOS" << endl;
-    cout << "7...........................................VENTAS" << endl;
+    cout << "7...........................................VENTAS" << endl << endl << endl;
+    cout << "8.........................................REGRESAR" << endl;
+    cout << "user$  ";
+
     cin >> ans;
     
     return ans;
@@ -125,7 +128,7 @@ void VerCarrito(){
 }
 
 void Ticket(){
-    system("clear");
+    system("cls");
     char ans;
     int suma = 0, id;
     string nombre_cliente;
@@ -190,7 +193,7 @@ int main(){
         switch (menu){
             case 1: {
                 while (true){
-                    system("clear");
+                    system("cls");
                     VerCarrito();
                     
                     int id;
@@ -264,7 +267,20 @@ int main(){
                 ans = 0;
                 break;
             }
-            case 3: break;
+            case 3: {
+                int ans = 0;
+                ans = MenuConsultas();
+                switch(ans){
+                    case 1: ventasxDia(); break;
+                    case 2: cout << "Estamos reparando esto \n"; break;
+                    case 3: cout << "Estamos reparando esto \n"; break;
+                    case 4: cout << "Estamos reparando esto \n"; break;
+                    case 5: cout << "Estamos reparando esto \n"; break;
+                    case 6: cout << "Estamos reparando esto \n"; break;
+                    case 7: cout << "Estamos reparando esto \n"; break;
+                }
+                break;
+            }
             case 4: {
                 int ans = MenuTrabajadores();
                 switch(ans){
