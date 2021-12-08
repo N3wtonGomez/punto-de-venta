@@ -7,7 +7,7 @@ using namespace std;
 void AltaTrabajador(int ID, string NOMBRE, string PATERNO, string MATERNO, long telefono, int civil, string DEPARTAMENTO, int turno){
     // variable del archivo
     ofstream arch_empleados;
-    arch_empleados.open("empleados.txt", ios::app); // se abre el archivo en modo de ampliación de este
+    arch_empleados.open("empleados.bin", ios::app); // se abre el archivo en modo de ampliación de este
 
     // por si falla el archivo
     if(arch_empleados.fail()){
@@ -29,8 +29,8 @@ void BajaTrabajador(int ID){
     int clave, contador = 0;
     size_t posicion;
 
-    arch_empleados.open("empleados.txt", ios::in); // modo lectura del archio
-    arch_empleados_in.open("temp.txt", ios::app); // modo escritura del archivo
+    arch_empleados.open("empleados.bin", ios::in); // modo lectura del archio
+    arch_empleados_in.open("temp.bin", ios::app); // modo escritura del archivo
 
     // por si el archivo falla
     if(arch_empleados.fail()){
@@ -63,14 +63,14 @@ void BajaTrabajador(int ID){
 
     arch_empleados.close();
     arch_empleados_in.close();
-    remove("empleados.txt");
-    rename("temp.txt", "empleados.txt");
+    remove("empleados.bin");
+    rename("temp.bin", "empleados.bin");
 }
 
 int BusquedaUltimoEmpleado(){
     // comprobamos si existe el documento
     ifstream comprobacion; // variable del archivo 
-    comprobacion.open("empleados.txt"); // abrimos el archivo
+    comprobacion.open("empleados.bin"); // abrimos el archivo
     // si existe y es bueno, se busca el ultimo empleado
     if(comprobacion.good()){
         ifstream arch_empleados; // variable del archivo
@@ -79,7 +79,7 @@ int BusquedaUltimoEmpleado(){
         size_t posicion;
         
         // abrimos el archivo en modo de lectura
-        arch_empleados.open("empleados.txt", ios::in);
+        arch_empleados.open("empleados.bin", ios::in);
 
         if(arch_empleados.fail()){ // por si el archivo falla
             cout << "No se pudo abrir el archivo";
@@ -123,7 +123,7 @@ void BusquedaEmpleado(int ID){
     int clave, contador = 0;
     size_t posicion;
 
-    arch_empleados.open("empleados.txt", ios::in);
+    arch_empleados.open("empleados.bin", ios::in);
 
     if(arch_empleados.fail()){
         cout << "No se pudo abrir el archivo";
@@ -157,7 +157,7 @@ void TodosEmpleados(){
     int clave, contador = 0;
     size_t posicion;
 
-    arch_empleados.open("empleados.txt", ios::in);
+    arch_empleados.open("empleados.bin", ios::in);
 
     if(arch_empleados.fail()){
         cout << "No se pudo abrir el archivo";

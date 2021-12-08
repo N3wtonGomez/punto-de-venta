@@ -81,7 +81,7 @@ int MenuConsultas(){
 void AddCarrito(string datos[6]){
     // variable del archivo
     ofstream arch_empleados;
-    arch_empleados.open("carrito.txt", ios::app);
+    arch_empleados.open("carrito.bin", ios::app);
 
     if(arch_empleados.fail()){
         cout << "No se pudo abrir el archivo";
@@ -99,7 +99,7 @@ void VerCarrito(){
     size_t posicion;
     float suma = 0;
 
-    arch_empleados.open("carrito.txt", ios::in);
+    arch_empleados.open("carrito.bin", ios::in);
     if(arch_empleados.good()){
         if(arch_empleados.fail()){
             cout << "No se pudo abrir el archivo";
@@ -149,7 +149,7 @@ void Ticket(){
         cout << "INGRESA TU ID: ";
         cin >> id;
 
-        arch_empleados.open("carrito.txt", ios::in);
+        arch_empleados.open("carrito.bin", ios::in);
 
         if(arch_empleados.fail()){
             cout << "No se pudo abrir el archivo";
