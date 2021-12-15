@@ -3,16 +3,6 @@
 #include <fstream> 
 using namespace std;
 
-const std::string currentDateTime() {
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
-    tstruct = *localtime(&now);
-    strftime(buf, sizeof(buf), "%Y-%m-", &tstruct);
-
-    return buf;
-}
-
 void ventas_hechas(int id, string cliente){
     // variable del archivo
     ofstream ventas;
@@ -33,7 +23,7 @@ void ventas_hechas(int id, string cliente){
         cout << "No se pudo abrir el archivo";
     }
 
-    ventas << currentDateTime() << ";";
+    ventas << "15/12/2021" << ";";
     ventas << endl << id << ";" << endl << cliente << ";" << endl;
 
     while (!arch_empleados.eof()){
@@ -75,10 +65,48 @@ int ventasxDia(){
                 contador++;
             }
             contador = 0;
-            if(datos[0] == currentDateTime()){
+            if(datos[0] == "15/12/2021"){
                 ventas_dias += 1;
             }
         }        
     }
     return ventas_dias;
+}
+
+void AddProductos_Vendidos(int id){
+    // el estado nos sirve para saber si queremos el mas vendio
+    // o el menos vendido
+    ifstream archivo;
+    ofstream temp;
+    string info, datos[2];
+    int contador =0;
+    size_t posicion;
+
+    archivo.open("productos_vendidos.bin", ios::in);
+    temp.open("temp.bin", ios::app);
+
+    while (!archivo.eof()){
+        while (getline(archivo, info)){
+            while((posicion=info.find(";"))!=string::npos){
+                datos[contador] = info.substr(0, posicion);
+                info.erase(0, posicion+1);
+                contador++;
+            }
+            contador = 0;
+            if(datos[0]==to_string(id)){
+                int sumador = atoi(datos[1].c_str()) +1;
+                temp << id << ";" << sumador << ";" << endl;
+            }else{
+                temp << id << ";1;"<<endl;
+            }
+        }
+        
+    }
+
+    archivo.close();
+    temp.close();
+
+    remove("productos_vendidos.bin");
+    rename("temp.bin", "productos_vendidos.bin");
+    
 }

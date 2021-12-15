@@ -25,6 +25,12 @@ int MenuPrincipal(){
     cout << "user$  ";
     cin >> ans;
 
+    // validamos si es un numero
+    while(! isdigit(ans)){
+        cout << "por favor ingresa una opcion valida \n";
+        cin >> ans;
+    }
+
     return ans;
 }
 
@@ -40,6 +46,12 @@ int MenuProductos(){
     cout << "user$  ";
     cin >> ans;
 
+    // validamos si es un numero
+    while(! isdigit(ans)){
+        cout << "por favor ingresa una opcion valida \n";
+        cin >> ans;
+    }
+
     return ans;
 }
 
@@ -54,6 +66,12 @@ int MenuTrabajadores(){
     cout << "5.........................................REGRESAR" << endl;
     cout << "user$  ";
     cin >> ans;
+
+    // validamos si es un numero
+    while(! isdigit(ans)){
+        cout << "por favor ingresa una opcion valida \n";
+        cin >> ans;
+    }
 
     return ans;
 }
@@ -74,6 +92,12 @@ int MenuConsultas(){
 
     cin >> ans;
     
+    // validamos si es un numero
+    while(! isdigit(ans)){
+        cout << "por favor ingresa una opcion valida \n";
+        cin >> ans;
+    }
+
     return ans;
 }
 
@@ -81,41 +105,48 @@ int MenuConsultas(){
 void AddCarrito(string datos[6]){
     // variable del archivo
     ofstream arch_empleados;
+    // abrimos el archivo en modo de sobreescritura
     arch_empleados.open("carrito.bin", ios::app);
 
-    if(arch_empleados.fail()){
+    if(arch_empleados.fail()){ // por si no se puede abrir el archivo
         cout << "No se pudo abrir el archivo";
     }
 
+    // guardamos la informacion en el archivo
     arch_empleados << datos[1] << ";" << datos[3] << ";" << datos[5];
     // cerramos el archivos
     arch_empleados.close();
 }
 
 void VerCarrito(){
-    ifstream arch_empleados;
-    string info, datos[3];
-    int clave, contador = 0;
-    size_t posicion;
-    float suma = 0;
+    ifstream arch_empleados; // variable del archivos
+    string info, datos[3]; // la variable 'datos' almacena la info leida
+    int clave, contador = 0; 
+    size_t posicion; // variable de la posicion
+    float suma = 0; // suma el valor de carritos
 
+    // abrimos el archivo
     arch_empleados.open("carrito.bin", ios::in);
+    // si existe el archivo lo leemos
     if(arch_empleados.good()){
+        // verificamos si se lee
         if(arch_empleados.fail()){
             cout << "No se pudo abrir el archivo";
         }
-        // if(arch_empleados.)
+        // mientras no se acabe el archivo
         while (!arch_empleados.eof()){
             while(getline(arch_empleados, info)){
+                // leemos la informacion del archivo y separamos esta por los ';'
                 while((posicion=info.find(";"))!=string::npos){
                     datos[contador] = info.substr(0, posicion);
                     info.erase(0, posicion+1);
                     contador++;
                 }
                 contador = 0;
+                // mostramos la informacion en la terminal
                 cout << datos[0] << "\t" << datos[2];
 
-                char aux[10];
+                char aux[10];   
                 strcpy(aux, datos[4].c_str());
                 suma += atof(aux);
                 cout << endl << endl << "Total: " << suma;
@@ -137,7 +168,7 @@ void Ticket(){
     cin >> ans;
 
     if(ans == 's' || ans == 'S'){
-        ifstream arch_empleados;
+        ifstream arch_ticket;
         string info, datos[3];
         int clave, contador = 0;
         float aux;
@@ -149,14 +180,14 @@ void Ticket(){
         cout << "INGRESA TU ID: ";
         cin >> id;
 
-        arch_empleados.open("carrito.bin", ios::in);
+        arch_ticket.open("carrito.bin", ios::in);
 
-        if(arch_empleados.fail()){
+        if(arch_ticket.fail()){
             cout << "No se pudo abrir el archivo";
         }
 
-        while (!arch_empleados.eof()){
-            while(getline(arch_empleados, info)){
+        while (!arch_ticket.eof()){
+            while(getline(arch_ticket, info)){
                 while((posicion=info.find(";"))!=string::npos){
                     datos[contador] = info.substr(0, posicion);
                     info.erase(0, posicion+1);
@@ -200,6 +231,12 @@ int main(){
                     cout << endl << "1. Salir\t2. Cobrar";
                     cout << endl << "Ingresa el ID para agregar: ";
                     cin >> id;
+
+                    // validamos si es un numero
+                    while(! isdigit(id)){
+                        cout << "por favor ingresa una opcion valida \n";
+                        cin >> id;
+                    }
 
                     if(id == 1){
                         break;

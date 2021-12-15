@@ -3,3 +3,4 @@ num
 *.txt
 *.bin
 .vscode
+*.exe
